@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import hero from "../assets/images/hero5.jpg";
-import { FaCommentDots } from 'react-icons/fa'; 
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaCommentDots } from 'react-icons/fa';
 
-// Array of quotes for Breeze
+// Import your images
+import hero1 from "../assets/images/image.png";
+import hero2 from "../assets/images/hero2.jpg";
+import hero3 from "../assets/images/hero3.jpg";
+import hero4 from "../assets/images/hero4.jpg";
+import hero5 from "../assets/images/hero5.jpg";
+import hero6 from "../assets/images/hero6.jpg";
+
+// Array of images and quotes for Breeze
+const images = [hero1, hero2, hero3, hero4, hero5, hero6];
 const quotes = [
   "Take a deep breath and find your calm.",
   "Every day is a new opportunity for growth.",
@@ -28,56 +37,71 @@ const quotes = [
 
 const Hero = () => {
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const [imageIndex, setImageIndex] = useState(0);
 
-  // Update quote every 20 seconds
+  // Cycle through quotes and images
   useEffect(() => {
-    const quoteInterval = setInterval(() => {
+    const interval = setInterval(() => {
       setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-    }, 20000);
+      setImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 20000); // 20 seconds
 
-    return () => clearInterval(quoteInterval);
+    return () => clearInterval(interval);
   }, []);
 
-  // Function to handle chatbot click
   const handleChatClick = () => {
-    // Add your chatbot logic here (e.g., opening a chat window)
     alert("Chatbot feature coming soon!");
   };
 
   return (
     <section className="relative flex items-center justify-center min-h-screen text-white pt-[60px]">
-    
-      <div className="absolute inset-0 overflow-hidden">
-        <img
-          src={hero}
-          alt="Calm and wellness"
-          className="w-full h-full object-cover transform scale-110 transition-transform duration-[15000ms] ease-out"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900 via-transparent to-blue-900 opacity-70"></div>
-      </div>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black bg-opacity-60"></div>
 
-     
-      <div className="absolute inset-0 flex items-center justify-center text-center p-4 ">
+      {/* Background image slider */}
+      <AnimatePresence>
+        <motion.div
+          key={imageIndex} // Unique key for each image
+          className="absolute inset-0 overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 2 }} // Smooth fade transition
+        >
+          <img
+            src={images[imageIndex]}
+            alt="Calm and wellness"
+            className="w-full h-full object-cover transform scale-110 transition-transform duration-[15000ms] ease-out"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900 via-transparent to-blue-900 opacity-70"></div>
+        </motion.div>
+      </AnimatePresence>
+
+      <div className="absolute inset-0 flex items-center justify-center text-center p-4">
         <p className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white max-w-4xl leading-tight transition-opacity duration-1000 transform scale-100">
           “{quotes[quoteIndex]}”
         </p>
       </div>
 
       {/* Chatbot */}
-      <div className="fixed bottom-8 right-8">
+      <div className="fixed bottom-8 right-8 z-40">
         <button
           onClick={handleChatClick}
-          className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 hover:shadow-lg transition duration-300 transform hover:scale-105 flex items-center justify-center"
-        > <h1 className='mr-3'>Breeze bot</h1>
-          <FaCommentDots className="text-3xl" /> {/* Chat icon */}
+          className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-600 hover:shadow-lg transition duration-300 transform hover:scale-105 flex items-center justify-center"
+        >
+          <h1 className="mr-3">Breeze bot</h1>
+          <FaCommentDots className="text-3xl" />
         </button>
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-        <span className="text-2xl lg:text-3xl">&#x2193;</span>
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-blue-600 animate-bounce flex items-center space-x-2">
+        <button className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-600 hover:shadow-lg transition duration-300 transform hover:scale-105 flex items-center justify-center"> <span className="text-3xl lg:text-4xl">&#x2193;</span>
+          <span className="text-lg lg:text-xl font-semibold">Scroll Down</span></button>
       </div>
+
     </section>
+
   );
 };
 

@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { FaCommentDots } from 'react-icons/fa';
+import TherapistSidebar from '../components/TherapistSidebar';
 const DashboardLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isChatbotVisible, setIsChatbotVisible] = useState(false);
@@ -22,6 +23,8 @@ const DashboardLayout = () => {
         <Header onToggle={toggleSidebar} />
         <Outlet /> {/* This will render the child routes */}
       </div>
+      
+
 
       {/* Fixed Chatbot */}
       {isChatbotVisible && (
@@ -42,7 +45,7 @@ const DashboardLayout = () => {
       <div className="fixed bottom-8 right-8">
         <button
           onClick={toggleChatbot}
-          className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 hover:shadow-lg transition duration-300 transform hover:scale-105 flex items-center justify-center"
+          className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-600 hover:shadow-lg transition duration-300 transform hover:scale-105 flex items-center justify-center"
         > <h1 className='mr-3'>Breeze bot</h1>
           <FaCommentDots className="text-3xl" />
           {isChatbotVisible ? '' : ''}
@@ -54,5 +57,9 @@ const DashboardLayout = () => {
 
   );
 };
+
+
+
+
 
 export default DashboardLayout;

@@ -14,6 +14,18 @@ import Breathing from './pages/dashboard/Breathing';
 import Reminders from './pages/dashboard/Reminders';
 import SupportChat from './pages/dashboard/SupportChat';
 import Logout from './pages/dashboard/Logout';
+import TherapistLogin from './pages/forms/TherapistLogin';
+import TherapistRegister from './pages/forms/TherapistRegister';
+import TherapistDashboardLayout from './Layouts/TherapistDashboardLayout';
+import Dashboard from './pages/therapistDashboard/Dashboard';
+import Assessments from './pages/therapistDashboard/Assessments';
+import Calender from './pages/therapistDashboard/Calender';
+import Clients from './pages/therapistDashboard/Clients';
+import Reports from './pages/therapistDashboard/Reports';
+import Resources from './pages/therapistDashboard/Resources';
+import Settings from './pages/therapistDashboard/Settings';
+import TherapistProfile from './pages/therapistDashboard/Profile';
+import UserProfile from './pages/dashboard/UserProfile';
 
 function App() {
   const router = createBrowserRouter([
@@ -45,6 +57,14 @@ function App() {
     path: "/login",
     element:<Login/>
    },
+   {
+    path: "/therapist-login",
+    element:<TherapistLogin/>
+   },
+   {
+    path: "/therapist-register",
+    element:<TherapistRegister/>
+   },
     
    {
     path: "/dashboard",
@@ -71,14 +91,62 @@ function App() {
         element: <SupportChat />,
       },
       {
+        path: "user-profile",
+        element: <UserProfile/>
+      },
+
+      {
         path: "logout",
         element: <Logout />,
       },
     ],
-  }
+  },
   
+  {
+    path: "/therapist-dashboard",
+    element:<TherapistDashboardLayout/>,
+    children: [
+      {
+        index: true, 
+        element: <Dashboard/>
+      },
+
+      {
+        path: "assessments",
+        element: <Assessments/>
+      },
+      {
+        path: "calendar",
+        element: <Calender/>
+      },
+      {
+        path: "clients",
+        element: <Clients/>
+      },
+      {
+        path: "reports",
+        element: <Reports/>
+      },
+      {
+        path: "resources",
+        element: <Resources/>
+      },
+      {
+        path: "settings",
+        element: <Settings/>
+      },
+      {
+        path: "profile",
+        element: <TherapistProfile/>
+      },
+     
+    ]
+   },
 
   ]);
+
+ 
+
 
   return <RouterProvider router={router} />;
 }

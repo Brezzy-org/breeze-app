@@ -33,16 +33,14 @@ const DashboardHome = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
-        
         const response = await apiClient.get('/users/me');
+        console.log("User profile response:", response.data); 
         setName(response.data.name); 
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }
     };
+    
 
     fetchUserProfile();
   }, []);

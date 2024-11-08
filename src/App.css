@@ -1,0 +1,13 @@
+
+.bg-about {
+    background-image: url("./assets/images/image.png");
+    background-size: cover;
+    background-position: center;
+  }
+
+
+  .therapist{
+    background-image: url(./assets//images/pic3.jpg);
+    background-size: cover;
+    background-position: center;
+  }

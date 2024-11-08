@@ -6,11 +6,11 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="text-white  fixed w-full z-10 ">
+    <header className="text-white  fixed w-full z-40 ">
       <nav className="container mx-auto flex items-center justify-between p-5">
         
         <div className="flex items-center space-x-3">
-        <div className="w-10 h-10 bg-blue-300 rounded-full flex items-center justify-center">
+        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
           <span className="text-white text-2xl font-bold">B</span>
         </div>
         <h1 className="text-2xl font-bold text-white">Breeze</h1>
@@ -25,12 +25,18 @@ const Navbar = () => {
         </ul>
 
         
-        <div className="hidden md:flex">
+        <div className="hidden md:flex gap-3">
           <Link to="/register">
             <button className="bg-white text-blue-600 px-4 py-2 rounded-full font-medium hover:bg-blue-100 transition">
               Get Started
             </button>
           </Link>
+          <Link to="/therapist-register">
+            <button className="bg-white text-blue-600 px-4 py-2 rounded-full font-medium hover:bg-blue-100 transition">
+              Join us as a Therapist
+            </button>
+          </Link>
+         
         </div>
 
         {/* Hamburger Icon for Mobile */}
@@ -57,6 +63,11 @@ const Navbar = () => {
           <Link to="">
             <button className="bg-white text-blue-600 w-full mt-3 py-2 rounded-full font-medium hover:bg-blue-100 transition" onClick={() => setIsOpen(false)}>
               Get Started
+            </button>
+          </Link>
+          <Link to="">
+            <button className="bg-white text-blue-600 w-full mt-3 py-2 rounded-full font-medium hover:bg-blue-100 transition" onClick={() => setIsOpen(false)}>
+              Join us as a therapist
             </button>
           </Link>
         </div>

@@ -2,11 +2,11 @@ import { apiClient } from "./config";
 
 export const apiGetProducts = async () => apiClient.get ("/products" );
 
-export const apiAddProduct = async (payload) => apiClient.post("/products",payload);
+export const apiAddMood = async (payload) => apiClient.post("/moods",payload);
     
 
 export const apiGetSingleProduct = async (id) =>{
-    return apiClient.get (`/adverts/${id}`);
+    return apiClient.get (`/moods/${id}`);
 };
 
 // edit advert
