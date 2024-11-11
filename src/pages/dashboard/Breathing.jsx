@@ -9,6 +9,7 @@ import resonantPulse from '../../assets/videos/resonantbreathing.mp4';
 import lionsBreath from '../../assets/videos/lionsbreathe.mp4';
 import breathRetention from '../../assets/videos/breatheretention.mp4';
 import lipBreathing from "../../assets/videos/lipbreathing.mp4"
+
 const exercises = [
   { level: 1, name: "Basic Deep Breathing", description: "Expand and contract your breath with a visual guide.", video: deepBreathing },
   { level: 2, name: "Box Breathing", description: "Inhale, hold, exhale, and hold again with a square outline.", video: boxBreathing },
