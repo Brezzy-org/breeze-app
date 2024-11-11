@@ -46,7 +46,7 @@ const DashboardHome = () => {
   }, []);
 
   return (
-    <div className="min-h-screen p-6 bg-blue-50 fixed ">
+    <div className="min-h-screen p-6 bg-blue-50  ">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-semibold text-blue-600">
           Hello, {name || 'Guest'}! {'\u{1F31E}'}

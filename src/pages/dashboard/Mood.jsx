@@ -2,29 +2,38 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { FaSmile } from 'react-icons/fa';
-import axios from 'axios';
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { apiAddMood } from '../../services/product'; 
 
 const MoodTracker = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [moods, setMoods] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   const handleSaveMood = async () => {
-   
+    const userId = localStorage.getItem('userID');
+    console.log("Retrieved userId:", userId); 
+  
+    if (!userId) {
+      console.error("User ID is missing. Redirecting to login.");
+      navigate('/login');
+      return;
+    }
+  
     const moodType = document.getElementById('moodType').value;
-    const moodLevel = document.getElementById('moodLevel').value;
-    const energyLevel = document.getElementById('energyLevel').value;
-    const stressLevel = document.getElementById('stressLevel').value;
+    const moodLevel = parseInt(document.getElementById('moodLevel').value, 10).toString();
+    const energyLevel = parseInt(document.getElementById('energyLevel').value, 10).toString();
+    const stressLevel = parseInt(document.getElementById('stressLevel').value, 10).toString();
     const sleepQuality = document.getElementById('sleepQuality').value;
     const description = document.getElementById('description').value;
-
+  
     const newMood = {
-      date: selectedDate.toLocaleDateString(),
+      userId,  
       moodType,
       moodLevel,
       energyLevel,
@@ -32,32 +41,23 @@ const navigate = useNavigate();
       sleepQuality,
       description,
     };
-
+  
+    console.log("Payload being sent:", newMood); 
+  
     const token = localStorage.getItem('token');
-
     if (!token) {
       console.error("No token found, redirecting to login");
-      navigate('/login'); 
+      navigate('/login');
       return;
     }
-
+  
     try {
-     
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/moods`, 
-        newMood,  
-        {
-          headers: {
-            'Content-Type': 'application/json',  
-            Authorization: `Bearer ${token}`,  
-          },
-        }
-      );
-
-      // If the request is successful, update local state with the new mood
-      setMoods([...moods, newMood]);
+      await apiAddMood(newMood); // Call your API function
+  
+      // Update local state with mood data
+      setMoods([...moods, { date: selectedDate.toLocaleDateString(), ...newMood }]);
       closeModal();
-
+  
       Swal.fire({
         icon: 'success',
         title: 'Mood Saved!',
@@ -65,7 +65,8 @@ const navigate = useNavigate();
         confirmButtonText: 'Okay',
       });
     } catch (error) {
-      
+      console.error("Error saving mood:", error.response ? error.response.data : error.message);
+  
       Swal.fire({
         icon: 'error',
         title: 'Error!',
@@ -75,18 +76,16 @@ const navigate = useNavigate();
     }
   };
 
- 
   const tileContent = ({ date, view }) => {
-    const mood = moods.find(m => m.date === date.toLocaleDateString());
+    const mood = moods.find(m => m.date === date.toISOString().split('T')[0]);
     return view === 'month' && mood ? <span>🌞</span> : null;
   };
 
   return (
     <div className="flex flex-col items-center mt-8 space-y-6">
-      
       <button
         onClick={openModal}
-        className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-blue-600 transition"
+        className="px-6 py-3 bg-blue-600 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-blue-600 transition"
       >
         What is your mood today?
       </button>
@@ -98,7 +97,6 @@ const navigate = useNavigate();
               <FaSmile className="mr-2 text-yellow-500" /> Log Your Mood
             </h2>
 
-         
             <div className="space-y-4">
               <input type="text" id="moodType" placeholder="Mood Type" className="w-full p-3 rounded bg-gray-100" />
               <input type="number" id="moodLevel" placeholder="Mood Level (1-10)" className="w-full p-3 rounded bg-gray-100" />
@@ -116,7 +114,6 @@ const navigate = useNavigate();
         </div>
       )}
 
-      {/* Calendar with Mood Display */}
       <div className="mt-10 w-full max-w-3xl">
         <h2 className="text-xl font-semibold text-blue-600 mb-4">Mood Calendar</h2>
         <Calendar

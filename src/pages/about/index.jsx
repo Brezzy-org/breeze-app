@@ -5,12 +5,12 @@ import pic from "../../assets/images/pic1.jpg";
 
 const AboutUs = () => {
   return (
-    <div className="relative bg-cover bg-about bg-center min-h-screen  flex items-center justify-center mt-10">
+    <div className="relative bg-cover bg-about bg-center min-h-screen flex items-center justify-center">
       {/* Overlay */}
       <div className="absolute inset-0 bg-black opacity-50"></div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto p-8 mt-7 mb-7 bg-white bg-opacity-90 rounded-lg shadow-lg grid gap-8 md:grid-cols-2">
+      <div className="relative z-10 max-w-5xl mx-auto m-8 bg-white bg-opacity-90 rounded-lg shadow-lg grid gap-8 md:grid-cols-2">
         {/* Left Section - Images Grid */}
         <div className="grid grid-cols-2 gap-4">
           {/* Image 1 */}
@@ -37,8 +37,8 @@ const AboutUs = () => {
 
         {/* Right Section - Text and Stats */}
         <div className="flex flex-col justify-between space-y-4">
-          {/* Sales & Ratings */}
-          <div className="bg-gray-100 p-4 rounded-lg text-center md:text-left">
+          {/* Sales & Ratings with Padding */}
+          <div className="bg-gray-100 p-6 rounded-lg text-center md:text-left">
             <h3 className="text-2xl font-semibold text-gray-800">
               <CountUp end={30000} duration={2.5} separator="," />+
             </h3>
@@ -52,7 +52,7 @@ const AboutUs = () => {
             <p className="mb-6">
               Breeze is a mental wellness app designed to make mental health support accessible and compassionate. With features like daily mood check-ins, guided breathing, a supportive chatbot, and a mental health toolkit, Breeze empowers users to manage stress, enhance mood, and improve well-being. Our team is dedicated to creating a safe, intuitive experience, helping users build resilience and embrace healthier, balanced lives—one Breeze at a time.
             </p>
-            <button className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-600">
+            <button className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700">
               Explore More
             </button>
           </div>

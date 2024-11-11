@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaArrowRight } from "react-icons/fa";
 // Import images for each feature
-import moodImage from "../../../assets/images/hero.png";
+import moodImage from "../../../assets/images/mood1.jpg";
 import breathingImage from "../../../assets/images/breathe.jpg";
 import mindfulnessImage from "../../../assets/images/reminders.png";
 import supportChatImage from "../../../assets/images/chat.png";

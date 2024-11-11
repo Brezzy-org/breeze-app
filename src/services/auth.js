@@ -15,8 +15,8 @@ export const getUserData = async () => {
   };
 //update user profile
 export const updateUserProfile = (userID, profileData) => {
-    return apiClient.patch(`/users/me/${userID}`, profileData);
-  };
+  return apiClient.patch(`/users/me/${userID}`, profileData);
+};
 //therapist registration
 export const apiTherapistSignup = async (payload) => {
     return await apiClient.post("/therapist/register", payload);

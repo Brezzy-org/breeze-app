@@ -11,7 +11,6 @@ const UserProfile = () => {
   });
   const [userID, setUserID] = useState(null); 
 
-  // Fetch profile data on component mount
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -25,7 +24,7 @@ const UserProfile = () => {
     fetchProfile();
   }, []);
 
-  // Open modal with current profile data prefilled
+  
   const handleEditProfile = () => {
     if (profile) {
       setFormData({
@@ -36,14 +35,13 @@ const UserProfile = () => {
     }
   };
 
-  // Handle profile update form submission
+ 
   const handleUpdateProfile = async (event) => {
     event.preventDefault();
     try {
       const { name, email } = formData;
       await updateUserProfile(userID, { name, email });
-      
-      // Success notification
+    
       Swal.fire({
         icon: 'success',
         title: 'Profile Updated',

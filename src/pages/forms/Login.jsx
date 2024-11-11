@@ -15,33 +15,37 @@ const Login = () => {
     const password = formData.get("password");
 
     try {
-      const response = await apiLogin({email, password});
-      
-      if(response.status === 200) {
-        localStorage.setItem("token", response.data.accessToken);
+        const response = await apiLogin({ email, password });
         
-        // SweetAlert for successful login
-        Swal.fire({
-          icon: 'success',
-          title: 'Login Successful',
-          text: 'You have logged in successfully!',
-        });
-         setTimeout(() => {
-          navigate('/dashboard'); 
-         }, 2000 );
-        
-      }
+        if (response.status === 200) {
+            // Assuming the response contains userId and accessToken
+            const { userId, accessToken } = response.data; // Adjust based on your API response structure
+            
+            // Store user ID and token in localStorage
+            localStorage.setItem("userID", userId); // Store the user ID
+            localStorage.setItem("token", accessToken); // Store the token
+            
+            // SweetAlert for successful login
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Successful',
+                text: 'You have logged in successfully!',
+            });
+            setTimeout(() => {
+                navigate('/dashboard'); 
+            }, 2000);
+        }
     } catch (error) {
-      console.error("Login failed:", error);
-      
-      // SweetAlert for login failure
-      Swal.fire({
-        icon: 'error',
-        title: 'Login Failed',
-        text: 'Incorrect email or password. Please try again.',
-      });
+        console.error("Login failed:", error);
+        
+        // SweetAlert for login failure
+        Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: 'Incorrect email or password. Please try again.',
+        });
     }
-  };
+};
 
   return (
     <div className="relative flex items-center justify-center min-h-screen ">
