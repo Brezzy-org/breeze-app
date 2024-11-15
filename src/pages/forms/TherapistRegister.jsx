@@ -97,14 +97,14 @@ const RegisterForm = () => {
             <label className="block text-gray-700 font-semibold">Bio</label>
             <textarea name="bio" placeholder="Tell us about yourself" className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-200" rows="3" required></textarea>
           </div>
-
-        </form>
-        <button
+          <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-150"
         >
           {loading ? "Loading..." : "Sign Up"}
         </button>
+        </form>
+        
         <p className="text-sm text-gray-600 mt-4 text-center">
           Already have an account?{" "}
           <a href="/therapist-login" className="text-blue-500 hover:underline">

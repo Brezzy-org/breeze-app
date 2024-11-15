@@ -48,17 +48,17 @@ const Breathing = () => {
   );
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-center mb-6">Breathing Exercises</h1>
+    <div className="p-6 space-y-6 breathing">
+      <h1 className="text-3xl font-bold text-center mb-6 ">Breathing Exercises</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {exercises.map((exercise) => (
           <div
             key={exercise.level}
-            className="p-4 bg-white border rounded-lg shadow-md text-center cursor-pointer hover:bg-gray-100"
+            className="p-4 bg-white border rounded-lg shadow-md text-center cursor-pointer hover:bg-gray-100 glass-card"
             onClick={() => handleStartExercise(exercise)}
           >
             <h2 className="text-lg font-semibold">{`Level ${exercise.level}: ${exercise.name}`}</h2>
-            <p className="text-sm text-gray-600 mt-2">{exercise.description}</p>
+            <p className="text-sm text-black mt-2">{exercise.description}</p>
           </div>
         ))}
       </div>

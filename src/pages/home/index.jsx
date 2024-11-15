@@ -4,6 +4,8 @@ import Hero from '../../components/Hero'
 import Footer from '../../components/Footer'
 import Features from './components/Features'
 import About from '../about'
+import BlogPosts from './components/BlogPosts'
+import ContactForm from './components/Contact'
 
 const Home = () => {
   return (
@@ -12,6 +14,8 @@ const Home = () => {
       <Hero/>
       <Features/>
       <About/>
+      <BlogPosts/>
+      <ContactForm/>
       <Footer/>
     </div>
   )

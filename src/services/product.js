@@ -1,22 +1,81 @@
 import { apiClient } from "./config";
 
-export const apiGetProducts = async () => apiClient.get ("/products" );
+// Get all moods
+export const apiGetMoods = async () => apiClient.get("/moods");
 
-export const apiAddMood = async (payload) => apiClient.post("/moods",payload);
-    
-
-export const apiGetSingleProduct = async (id) =>{
-    return apiClient.get (`/moods/${id}`);
+// Add a new mood
+export const apiAddMood = async (payload) => {
+    console.log(payload);
+    return apiClient.post("/moods", payload);
 };
 
-// edit advert
-export const apiEditProduct = async (id, payload) => {
-    return apiClient.patch(`/adverts/${id}`, payload)
+// Get a single mood by ID
+export const apiGetSingleMood = async (id) => {
+    return apiClient.get(`/moods/${id}`);
 };
 
+// Edit a mood
+export const apiEditMood = async (id, payload) => {
+    return apiClient.patch(`/moods/${id}`, payload);
+};
 
+// Delete a mood
+export const apiDeleteMood = async (id) => {
+    return apiClient.delete(`/moods/${id}`);
+};
 
-// delete advert
-export const apiDeleteProduct = async (id) => {
-    return apiClient.delete(`/adverts/${id}`)
+// Create a new blog post
+export const apiCreateBlogPost = async (payload) => {
+    try {
+        console.log(payload); // Log the payload for debugging
+        const response = await apiClient.post("/therapist/blogs", payload); // Send POST request to the /therapists/blogs endpoint
+        return response.data; // Return the response data
+    } catch (error) {
+        console.error("Error creating blog post:", error); // Log any error that occurs
+        throw error; // Optionally rethrow the error for further handling
+    }
+};
+
+// Get all blogs for a specific therapist
+export const apiGetBlogsByTherapist = async (therapistId) => {
+    try {
+        const response = await apiClient.get(`/therapist/blogs/${therapistId}`);
+        return response.data; // Return the list of blogs for the therapist
+    } catch (error) {
+        console.error("Error fetching blogs for therapist:", error);
+        throw error;
+    }
+};
+
+// Get all blogs for users
+
+export const getAllBlogs = async () => {
+    try {
+      const response = await api.get('/therapist/blogs'); // Assuming this endpoint returns an array
+      return response.data; // Assuming the data contains the blogs array directly
+    } catch (error) {
+      throw error;
+    }
+  };
+
+// Edit a blog post
+export const apiEditBlogPost = async (id, payload) => {
+    try {
+        const response = await apiClient.patch(`/therapist/blogs/${id}`, payload);
+        return response.data; // Return updated blog post data
+    } catch (error) {
+        console.error("Error editing blog post:", error);
+        throw error;
+    }
+};
+
+// Delete a blog post
+export const apiDeleteBlogPost = async (id) => {
+    try {
+        await apiClient.delete(`/therapist/blogs/${id}`);
+        return { message: "Blog deleted successfully" }; // Return a success message
+    } catch (error) {
+        console.error("Error deleting blog post:", error);
+        throw error;
+    }
 };

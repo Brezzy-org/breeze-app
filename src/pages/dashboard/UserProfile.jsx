@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Swal from 'sweetalert2';
 import { getUserData, updateUserProfile } from '../../services/auth';
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-  });
-  const [userID, setUserID] = useState(null); 
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const [userID, setUserID] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const response = await getUserData();
         setProfile(response.data);
-        setUserID(response.data.id); 
+        setUserID(response.data.id);
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
@@ -24,24 +22,26 @@ const UserProfile = () => {
     fetchProfile();
   }, []);
 
-  
   const handleEditProfile = () => {
     if (profile) {
-      setFormData({
-        name: profile.name,
-        email: profile.email
-      });
-      setShowModal(true);
+      // Check if refs are defined before setting their values
+      if (nameRef.current && emailRef.current) {
+        nameRef.current.value = profile.name;
+        // emailRef.current.value = profile.email;
+      }
+      setShowModal(true); // Show the modal
     }
   };
 
- 
   const handleUpdateProfile = async (event) => {
     event.preventDefault();
     try {
-      const { name, email } = formData;
-      await updateUserProfile(userID, { name, email });
-    
+      const updatedProfile = {
+        name: nameRef.current.value,
+        // email: emailRef.current.value,
+      };
+      await updateUserProfile(userID, updatedProfile);
+
       Swal.fire({
         icon: 'success',
         title: 'Profile Updated',
@@ -49,9 +49,8 @@ const UserProfile = () => {
         confirmButtonText: 'OK'
       });
 
-      
-      setProfile({ ...profile, ...formData });
-      setShowModal(false);
+      setProfile({ ...profile, ...updatedProfile });
+      setShowModal(false); // Close the modal after updating
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -78,27 +77,28 @@ const UserProfile = () => {
         Update Profile
       </button>
 
-    
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
           <div className="bg-white rounded-lg p-6 max-w-lg w-full">
             <h3 className="text-xl font-semibold text-blue-600 mb-4">Update Profile</h3>
             <form onSubmit={handleUpdateProfile} className="space-y-4">
-              
               <input 
                 type="text" 
-                name="name" 
-                value={formData.name} 
+                ref={nameRef} 
                 placeholder="Name" 
                 className="w-full p-2 border rounded" 
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              /> 
-             
+              />
+              {/* <input 
+                type="email" 
+                ref={emailRef} 
+                placeholder="Email" 
+                className="w-full p-2 border rounded" 
+              /> */}
               <div className="flex justify-end space-x-2">
                 <button 
                   type="button" 
                   className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400" 
-                  onClick={() => setShowModal(false)}
+                  onClick={() => setShowModal(false)} // Close modal
                 >
                   Cancel
                 </button>

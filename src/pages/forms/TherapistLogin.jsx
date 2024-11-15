@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { apiTherapistLogin } from "../../services/auth";
 
-
 const Login = () => {
   const navigate = useNavigate(); 
 
@@ -14,11 +13,13 @@ const Login = () => {
     const password = formData.get("password");
 
     try {
-      const response = await apiTherapistLogin({email, password});
+      const response = await apiTherapistLogin({ email, password });
       
-      if(response.status === 200) {
+      if (response.status === 200) {
+        // Assuming the response contains an accessToken and therapistId
         localStorage.setItem("token", response.data.accessToken);
-        
+        localStorage.setItem("therapistID", response.data.therapistId); // Ensure therapistId is available
+
         // SweetAlert for successful login
         Swal.fire({
           icon: 'success',
@@ -43,7 +44,7 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-50">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-      <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">Therapist Login</h2>
+        <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">Therapist Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
@@ -56,7 +57,6 @@ const Login = () => {
               type="email"
               id="email"
               name="email"
-              
               required
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
             />
@@ -72,7 +72,6 @@ const Login = () => {
               type="password"
               id="password"
               name="password"
-              
               required
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
             />

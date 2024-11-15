@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { apiClient } from '../services/config';
+import { Sparkles } from 'lucide-react';
 
 const Header = () => {
   const [user, setUser] = useState(null);
@@ -19,20 +20,20 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="w-full bg-gradient-to-r from-blue-200 to-green-200 p-4 shadow-md flex items-center justify-between">
+    <header className="w-full  bg-gradient-to-r from-blue-600 to-blue-700 p-4 shadow-md flex items-center justify-between">
       
-      <div className="flex items-center space-x-3">
-        <div className="w-10 h-10 bg-blue-300 rounded-full flex items-center justify-center">
-          <span className="text-white text-2xl font-bold">B</span>
-        </div>
-        <h1 className="text-2xl font-bold text-gray-800">Breeze</h1>
-      </div>
+      <div className="flex items-center space-x-3 mb-6">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-700">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900">Breeze</span>
+            </div>
 
       
       <nav className="hidden md:flex space-x-6">
-        <a href="#home" className="text-gray-700 hover:text-blue-700 transition">Home</a>
-        <a href="#features" className="text-gray-700 hover:text-blue-700 transition">Features</a>
-        <a href="#contact" className="text-gray-700 hover:text-blue-700 transition">Contact</a>
+        <a href="#home" className="text-white hover:text-blue-700 transition">Home</a>
+        <a href="#features" className="text-white hover:text-blue-700 transition">Features</a>
+        <a href="#contact" className="text-white hover:text-blue-700 transition">Contact</a>
       </nav>
 
       {/* Profile Section */}
@@ -46,7 +47,7 @@ const Header = () => {
                 className="w-8 h-8 rounded-full"
               />
             ) : (
-              <FaUserCircle className="text-3xl text-gray-600 cursor-pointer hover:text-blue-700 transition" />
+              <FaUserCircle className="text-3xl text-white cursor-pointer hover:text-blue-700 transition" />
             )}
             <span className="text-gray-800 font-semibold">{user.name}</span>
           </>

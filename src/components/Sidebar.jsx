@@ -49,7 +49,7 @@ const Sidebar = ({ isCollapsed }) => {
   };
 
   return (
-    <div className="h-screen w-64 bg-blue-600  p-6 shadow-lg flex flex-col justify-between">
+    <div className="h-screen w-64  bg-gradient-to-r from-blue-600 to-blue-700  p-6 shadow-lg flex flex-col justify-between">
       <div>
         <h1 className="text-3xl font-bold text-white mb-8">Breeze</h1>
         <nav className="flex flex-col space-y-6">

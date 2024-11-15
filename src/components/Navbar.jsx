@@ -1,77 +1,141 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import logo from "../assets/images/logo3.png";
+import { Menu, X, ChevronDown, LogIn, UserPlus, Sparkles } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle navbar background on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: 'Features', path: '/features' },
+    { name: 'About', path: '/about' },
+    { name: 'Blog', path: '/blog' },
+    { name: 'Contact', path: '/contact' }
+  ];
 
   return (
-    <header className="text-white  fixed w-full z-40 ">
-      <nav className="container mx-auto flex items-center justify-between p-5">
-        
-        <div className="flex items-center space-x-3">
-        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-          <span className="text-white text-2xl font-bold">B</span>
-        </div>
-        <h1 className="text-2xl font-bold text-white">Breeze</h1>
-        </div>
+    <header 
+      className={`fixed w-full z-40 transition-all duration-300 ${
+        scrolled || isOpen 
+          ? 'bg-white shadow-md text-gray-800' 
+          : 'bg-transparent text-white'
+      }`}
+    >
+      <nav className="container mx-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link 
+              to="/" 
+              className="flex items-center space-x-3 group"
+            >
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-700 transform transition-transform group-hover:rotate-6`}>
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <span className={`text-2xl font-bold ${
+                scrolled ? 'text-gray-800' : 'text-white'
+              }`}>
+                Breeze
+              </span>
+            </Link>
 
-        
-        <ul className="hidden md:flex space-x-8 text-lg font-light">
-          <li><Link to="" className="hover:text-blue-200">Features</Link></li>
-          <li><Link to="" className="hover:text-blue-200">About</Link></li>
-          <li><Link to="" className="hover:text-blue-200">Blog</Link></li>
-          <li><Link to="" className="hover:text-blue-200">Contact</Link></li>
-        </ul>
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex md:items-center md:space-x-8">
+              {/* Nav Links */}
+              <div className="hidden md:flex items-center space-x-8">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                      scrolled ? 'text-gray-600' : 'text-gray-100'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
 
-        
-        <div className="hidden md:flex gap-3">
-          <Link to="/register">
-            <button className="bg-white text-blue-600 px-4 py-2 rounded-full font-medium hover:bg-blue-100 transition">
-              Get Started
-            </button>
-          </Link>
-          <Link to="/therapist-register">
-            <button className="bg-white text-blue-600 px-4 py-2 rounded-full font-medium hover:bg-blue-100 transition">
-              Join us as a Therapist
-            </button>
-          </Link>
-         
-        </div>
+              {/* Action Buttons */}
+              <div className="hidden md:flex items-center space-x-4">
+                <Link to="/register">
+                  <button className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Sign In
+                  </button>
+                </Link>
+                <Link to="/therapist-register">
+                  <button className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Join as Therapist
+                  </button>
+                </Link>
+              </div>
+            </div>
 
-        {/* Hamburger Icon for Mobile */}
-        <div className="md:hidden">
-          <button onClick={() => setIsOpen(!isOpen)} className="text-white focus:outline-none">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-md hover:bg-blue-100/20 transition-colors"
+              aria-expanded="false"
+            >
+              <span className="sr-only">Open main menu</span>
               {isOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                <X className="block h-6 w-6" aria-hidden="true" />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                <Menu className="block h-6 w-6" aria-hidden="true" />
               )}
-            </svg>
-          </button>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        <div
+          className={`md:hidden transition-all duration-300 ease-in-out ${
+            isOpen
+              ? 'max-h-screen opacity-100'
+              : 'max-h-0 opacity-0 overflow-hidden'
+          }`}
+        >
+          <div className="px-4 pt-2 pb-3 space-y-1 bg-white shadow-lg rounded-b-2xl">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <div className="pt-4 space-y-2">
+              <Link
+                to="/register"
+                className="block w-full px-4 py-2 text-center rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/therapist-register"
+                className="block w-full px-4 py-2 text-center rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Join as Therapist
+              </Link>
+            </div>
+          </div>
         </div>
       </nav>
-
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-blue-600 px-5 pt-2 pb-4 space-y-3">
-          <Link to="/features" className="block text-lg hover:text-blue-200" onClick={() => setIsOpen(false)}>Features</Link>
-          <Link to="" className="block text-lg hover:text-blue-200" onClick={() => setIsOpen(false)}>About</Link>
-          <Link to="" className="block text-lg hover:text-blue-200" onClick={() => setIsOpen(false)}>Pricing</Link>
-          <Link to="" className="block text-lg hover:text-blue-200" onClick={() => setIsOpen(false)}>Contact</Link>
-          <Link to="">
-            <button className="bg-white text-blue-600 w-full mt-3 py-2 rounded-full font-medium hover:bg-blue-100 transition" onClick={() => setIsOpen(false)}>
-              Get Started
-            </button>
-          </Link>
-          <Link to="">
-            <button className="bg-white text-blue-600 w-full mt-3 py-2 rounded-full font-medium hover:bg-blue-100 transition" onClick={() => setIsOpen(false)}>
-              Join us as a therapist
-            </button>
-          </Link>
-        </div>
-      )}
     </header>
   );
 };

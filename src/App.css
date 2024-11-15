@@ -11,3 +11,22 @@
     background-size: cover;
     background-position: center;
   }
+
+  .breathing{
+    background-image: url(./assets/images/pixx2.jpeg);
+    background-size: cover;
+    background-position: center;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(10px); 
+    border: 1px solid rgba(255, 255, 255, 0.5); 
+    border-radius: 0.5rem; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, opacity 0.3s ease; 
+  }
+  
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.5); 
+  }

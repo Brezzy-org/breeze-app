@@ -29,7 +29,7 @@ const DashboardLayout = () => {
         </div>
 
       
-        <div className="mt-16 overflow-y-auto h-full p-4">
+        <div className=" overflow-y-auto h-full p-4">
           <Outlet />
         </div>
       </div>

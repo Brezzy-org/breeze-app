@@ -21,11 +21,11 @@ import Dashboard from './pages/therapistDashboard/Dashboard';
 import Assessments from './pages/therapistDashboard/Assessments';
 import Calender from './pages/therapistDashboard/Calender';
 import Clients from './pages/therapistDashboard/Clients';
-import Reports from './pages/therapistDashboard/Reports';
 import Resources from './pages/therapistDashboard/Resources';
 import Settings from './pages/therapistDashboard/Settings';
 import TherapistProfile from './pages/therapistDashboard/Profile';
 import UserProfile from './pages/dashboard/UserProfile';
+import Blog from './pages/therapistDashboard/Blog';
 
 function App() {
   const router = createBrowserRouter([
@@ -124,8 +124,8 @@ function App() {
         element: <Clients/>
       },
       {
-        path: "reports",
-        element: <Reports/>
+        path: "blog",
+        element: <Blog/>
       },
       {
         path: "resources",
