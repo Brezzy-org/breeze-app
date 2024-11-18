@@ -135,7 +135,7 @@ const Blog = () => {
       <div className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
           {blog.image && (
                 <img
-                    src={blog.image}
+                    src={`https://savefiles.org/${blog.image}?shareable_link=321`}
                     alt={blog.title}
                     className="w-full h-48 object-cover mb-4 rounded-md"
                 />

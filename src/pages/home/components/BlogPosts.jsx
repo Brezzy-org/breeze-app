@@ -1,87 +1,171 @@
 import React, { useState, useEffect } from 'react';
-import { getAllBlogs } from '../../../services/product'; // Ensure this is needed or remove if not used
-import BlogCard from '../../../components/BlogCard';
-import Modal from '../../../components/Modal';
-import Swal from 'sweetalert2';
-import axios from 'axios';
+import { ThumbsUp, MessageCircle, Calendar, Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const App = () => {
-  const [blogs, setBlogs] = useState([]);
+function App() {
+  const [blogs, setBlogs] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
   const [selectedBlog, setSelectedBlog] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch blogs using the API
-  const fetchBlogs = async () => {
-    const url = `${import.meta.env.VITE_BASE_URL}/therapist/blogs`;
-    console.log(`Fetching from URL: ${url}`);
-    setLoading(true); 
-
-    try {
-      const response = await axios.get(url);
-      console.log("Full Response:", response);
-      console.log("Response Data:", response.data);
-
-      if (response.data && Array.isArray(response.data.blogs)) { 
-        console.log("Blogs found:", response.data.blogs);
-        setBlogs(response.data.blogs); 
-      } else {
-        console.warn("No blogs found in response:", response.data);
-        Swal.fire({
-          icon: 'warning',
-          title: 'No Blogs Found',
-          text: 'There are no blogs available at the moment.',
-          confirmButtonColor: '#3B82F6',
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching blogs:", error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Failed to load blogs. Please try again later.',
-        confirmButtonColor: '#3B82F6',
-      });
-    } finally {
-      setLoading(false); 
-    }
-  };
-
+  const [searchDate, setSearchDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [likes, setLikes] = useState({});
+  const [expandedBlogId, setExpandedBlogId] = useState(null);
   useEffect(() => {
-    fetchBlogs(); 
+    
+    const fetchBlogs = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('https://breeze-api-e791.onrender.com/therapist/blogs'); 
+        if (!response.ok) throw new Error('Failed to fetch blogs');
+        const data = await response.json();
+        setBlogs(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
   }, []);
 
+  const handleLike = (blogId) => {
+    setLikes((prev) => ({
+      ...prev,
+      [blogId]: (prev[blogId] || 0) + 1,
+    }));
+  };
+
+  const filteredBlogs = blogs.filter(
+    (blog) => !searchDate || blog.date === searchDate
+  );
+
+  const blogsPerPage = 4;
+  const indexOfLastBlog = currentPage * blogsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+  const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
+
+
+  
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Therapist Blogs</h1>
-          <p className="text-xl text-gray-600">
-            Discover insights and wisdom from our experienced therapists
-          </p>
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800">Featured Blogs From our Therapists</h1>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <input
+                type="date"
+                value={searchDate}
+                onChange={(e) => setSearchDate(e.target.value)}
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            </div>
+            {searchDate && (
+              <button
+                onClick={() => setSearchDate('')}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                Clear Filter
+              </button>
+            )}
+          </div>
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          </div>
-        ) : blogs.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {blogs.map((blog) => (
-              <BlogCard key={blog.id} blog={blog} onClick={setSelectedBlog} />
-            ))}
-          </div>
+          <p className="text-center text-gray-500">Loading blogs...</p>
+        ) : error ? (
+          <p className="text-center text-red-500">Error: {error}</p>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-xl text-gray-600">No blogs available at the moment.</p>
-          </div>
+          <>
+          
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {currentBlogs.map((blog) => (
+                <div
+                  key={blog.id}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-[1.02]"
+                >
+                  <img
+                    src={`https://savefiles.org/${blogs.image}?shareable_link=522`}
+                    alt={blog.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                        {blog.title}
+                      </h2>
+                      {/* <span className="text-sm text-gray-500">{blog.date}</span> */}
+                    </div>
+                    <p className="text-gray-600 text-sm mb-2">
+                      By {blog.therapistName}
+                    </p>
+                    <p className={expandedBlogId === blog.id ? "mb-4" : "mb-4 line-clamp-3"}>
+                      {blog.article}
+                    </p>
+                    {/* <p className="text-gray-700 mb-4">{blog.preview}</p> */}
+
+                    <div className="flex items-center justify-between">
+                      {/* <div className="flex space-x-4"> */}
+                        {/* <button
+                          onClick={() => handleLike(blog.id)}
+                          className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition"
+                        >
+                          <ThumbsUp className="w-5 h-5" />
+                          <span>{(likes[blog.id] || 0) + blog.likes}</span>
+                        </button> */}
+                        {/* <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition">
+                          <MessageCircle className="w-5 h-5" />
+                          <span>{blog.comments.length}</span>
+                        </button> */}
+                      {/* </div> */}
+                      <div className="flex items-center justify-between">
+                      <button
+                        onClick={() => setExpandedBlogId(expandedBlogId === blog.id ? null : blog.id)}
+                        className="text-blue-600 hover:text-blue-800 transition duration-150"
+                      >
+                        {expandedBlogId === blog.id ? "Read Less" : "Read More"}
+                      </button>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {filteredBlogs.length > blogsPerPage && (
+              <div className="flex justify-center items-center space-x-4 mt-8">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <span className="text-gray-600">
+                  Page {currentPage} of{' '}
+                  {Math.ceil(filteredBlogs.length / blogsPerPage)}
+                </span>
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(prev + 1, Math.ceil(filteredBlogs.length / blogsPerPage))
+                    )
+                  }
+                  disabled={currentPage === Math.ceil(filteredBlogs.length / blogsPerPage)}
+                  className="p-2 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
-
-      {selectedBlog && (
-        <Modal blog={selectedBlog} onClose={() => setSelectedBlog(null)} />
-      )}
     </div>
   );
-};
+}
 
 export default App;

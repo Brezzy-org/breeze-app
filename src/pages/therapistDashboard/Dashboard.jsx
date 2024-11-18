@@ -1,11 +1,23 @@
 import React from 'react';
 import Calendar from "./Calender.jsx"
 import CalendlyPopup from '../../components/CalendlyPopUp.jsx';
-
+import { useState, useEffect } from 'react';
+import { getTherapistData } from '../../services/auth.js';
 
 const Dashboard = () => {
-  // Sample data (in real app, these would come from your state or API)
- 
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await getTherapistData();
+        setProfile(response.data);
+      } catch (error) {
+        console.error("Error fetching therapist profile:", error);
+      }
+    };
+    fetchProfile();
+  }, []);
   const clients = [
     { name: 'John Doe', nextSession: '10/25/2024' },
     { name: 'Jane Smith', nextSession: '10/26/2024' }
@@ -14,7 +26,7 @@ const Dashboard = () => {
     { title: 'Mental Health Tips', likes: 20, comments: 5 },
     { title: 'Managing Stress', likes: 15, comments: 3 }
   ];
-
+  if (!profile) return <p>Loading profile...</p>;
   return (
     <div>
       <div className="p-6 max-w-7xl mx-auto">
@@ -25,9 +37,13 @@ const Dashboard = () => {
             <div className="flex items-center space-x-4">
               <img src="https://via.placeholder.com/60" alt="Profile" className="rounded-full" />
               <div>
-                <h2 className="text-xl font-semibold">Dr. Jane Doe</h2>
-                <p className="text-sm text-gray-500">Clinical Psychologist</p>
-                <p className="text-sm text-green-500">Available for Sessions</p>
+                <p><strong>Name:</strong> {profile.name}</p>
+                <p><strong>Email:</strong> {profile.email}</p>
+                <p><strong>Phone Number:</strong> {profile.phoneNumber}</p>
+                <p><strong>Qualifications:</strong> {profile.qualifications}</p>
+                <p><strong>Expertise:</strong> {profile.expertise}</p>
+                <p><strong>Years of Experience:</strong> {profile.experiencedYears}</p>
+                <p><strong>Bio:</strong> {profile.bio}</p>
               </div>
             </div>
           </div>

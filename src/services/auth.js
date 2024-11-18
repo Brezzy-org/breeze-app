@@ -19,6 +19,7 @@ export const updateUserProfile = (userID, profileData) => {
 };
 //therapist registration
 export const apiTherapistSignup = async (payload) => {
+  console.log(payload)
     return await apiClient.post("/therapist/register", payload);
 };
 
@@ -31,10 +32,10 @@ export const apiTherapistLogin = async (payload) => {
 export const getTherapistData = async () => {
     return await apiClient.get("/therapist/me");
 };
-
+//update therapist profile
 export const updateTherapistProfile = async (id, profileData) => {
     try {
-      const response = await apiClient.patch(`therapist/${id}`, profileData);
+      const response = await apiClient.patch(`therapist/me/${id}`, profileData);
       return response;
     } catch (error) {
       console.error("Error updating therapist profile:", error);
