@@ -9,6 +9,7 @@ export const apiSignup = async (payload) => {
 export const apiLogin = async (payload) => {
     return apiClient.post("/users/login",payload)
 }
+
 //user profile
 export const getUserData = async () => {
     return await apiClient.get("/users/me"); 

@@ -87,7 +87,7 @@ function App() {
                   className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-[1.02]"
                 >
                   <img
-                    src={`https://savefiles.org/${blogs.image}?shareable_link=522`}
+                    src={`https://savefiles.org/${blog.image}?shareable_link=522`}
                     alt={blog.title}
                     className="w-full h-48 object-cover"
                   />
@@ -101,25 +101,25 @@ function App() {
                     <p className="text-gray-600 text-sm mb-2">
                       By {blog.therapistName}
                     </p>
-                    <p className={expandedBlogId === blog.id ? "mb-4" : "mb-4 line-clamp-3"}>
+                    <p className={expandedBlogId === blog.id ? "mb-4" : "mb-4"}>
                       {blog.article}
                     </p>
                     {/* <p className="text-gray-700 mb-4">{blog.preview}</p> */}
 
                     <div className="flex items-center justify-between">
-                      {/* <div className="flex space-x-4"> */}
-                        {/* <button
+                      <div className="flex space-x-4">
+                        <button
                           onClick={() => handleLike(blog.id)}
                           className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition"
                         >
                           <ThumbsUp className="w-5 h-5" />
-                          <span>{(likes[blog.id] || 0) + blog.likes}</span>
-                        </button> */}
-                        {/* <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition">
+                          {/* <span>{(likes[blog.id] || 0) + blog.likes}</span> */}
+                        </button>
+                        <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition">
                           <MessageCircle className="w-5 h-5" />
-                          <span>{blog.comments.length}</span>
-                        </button> */}
-                      {/* </div> */}
+                          {/* <span>{blog.comments.length}</span> */}
+                        </button>
+                      </div>
                       <div className="flex items-center justify-between">
                       <button
                         onClick={() => setExpandedBlogId(expandedBlogId === blog.id ? null : blog.id)}
