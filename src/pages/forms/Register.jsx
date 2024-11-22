@@ -73,7 +73,7 @@ const Register = () => {
                     type="text"
                     name='name'
                     className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out"
-                    placeholder="Dr. Jane Smith"
+                    placeholder=" Jane Smith"
                     required
                   />
                 </div>

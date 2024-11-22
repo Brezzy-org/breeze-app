@@ -32,7 +32,7 @@ const Header = () => {
               <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-700">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold text-gray-900">Breeze</span>
+              <span className="text-2xl font-bold text-white">Breeze</span>
             </div>
 
       <nav className="hidden md:flex space-x-6">
@@ -53,11 +53,11 @@ const Header = () => {
               />
             ) : (
               <FaUserCircle
-                className="text-3xl text-gray-600 cursor-pointer hover:text-blue-700 transition"
+                className="text-3xl text-white cursor-pointer hover:text-blue-700 transition"
                 
               />
             )}
-            <span className="text-gray-800 font-semibold">{user.name}</span>
+            <span className="text-white font-semibold">{user.name}</span>
 
 
             {/* Profile Update Modal */}
