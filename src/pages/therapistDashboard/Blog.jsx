@@ -9,7 +9,6 @@ const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [editingBlogId, setEditingBlogId] = useState(null);
   const [formData, setFormData] = useState({
-    therapistName: '',
     title: '',
     article: '',
     image: null,
@@ -20,7 +19,7 @@ const Blog = () => {
   const closeModal = () => {
     setShowModal(false);
     setEditingBlogId(null);
-    setFormData({ therapistName: '', title: '', article: '', image: null }); // Reset form data
+    setFormData({ title: '', article: '', image: null }); 
   };
 
   const fetchBlogs = async () => {
@@ -33,10 +32,11 @@ const Blog = () => {
 
     try {
         const blogs = await apiGetBlogsByTherapist(therapistId);
-        if (blogs) {
+        console.log("Fetched Blogs:", blogs); 
+        if (Array.isArray(blogs)) {
             setBlogs(blogs);
         } else {
-            console.error("No blogs returned from API.");
+            console.error("Expected an array of blogs.");
         }
     } catch (error) {
         console.error("Error fetching blogs:", error);
@@ -46,7 +46,7 @@ const Blog = () => {
             text: 'Failed to fetch blogs. Please try again later.',
         });
     }
-  };
+};
 
   useEffect(() => {
     fetchBlogs();
@@ -55,41 +55,35 @@ const Blog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      if (editingBlogId) {
-        await apiEditBlogPost(editingBlogId, formData);
-        Swal.fire({
-          icon: 'success',
-          title: 'Blog Updated!',
-          text: 'Your blog has been updated successfully.',
-          confirmButtonText: 'Okay',
-        });
-      } else {
-        await apiCreateBlogPost(formData);
-        Swal.fire({
-          icon: 'success',
-          title: 'Blog Created!',
-          text: 'Your blog has been posted successfully.',
-          confirmButtonText: 'Okay',
-        });
-      }
-      fetchBlogs();
-      closeModal();
-    } catch (error) {
-      console.error("Error saving blog:", error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error!',
-        text: 'Failed to create or update your blog. Please try again.',
-        confirmButtonText: 'Try Again',
-      });
+    const payload = new FormData();
+    payload.append('title', formData.title);
+    payload.append('article', formData.article);
+    if (formData.image) {
+        payload.append('image', formData.image); 
     }
-  };
+
+    
+    try {
+        let newBlog;
+        if (editingBlogId) {
+            newBlog = await apiEditBlogPost(editingBlogId, payload);
+            Swal.fire('Blog Updated!', '', 'success');
+        } else {
+            newBlog = await apiCreateBlogPost(payload);
+            console.log("New Blog Response:", newBlog);
+            setBlogs((prev) => [...prev, newBlog]); 
+            Swal.fire('Blog Created!', '', 'success');
+        }
+        closeModal();
+    } catch (error) {
+        console.error("Error saving blog:", error);
+        Swal.fire('Error!', 'Failed to create or update your blog. Please try again.', 'error');
+    }
+};
 
   const handleEdit = (blog) => {
     setEditingBlogId(blog.id);
     setFormData({
-      therapistName: blog.therapistName,
       title: blog.title,
       article: blog.article,
       image: null,
@@ -129,47 +123,51 @@ const Blog = () => {
   };
 
   const BlogPost = ({ blog }) => {
-    const [isExpanded, setIsExpanded] = useState(false); // State for Read More functionality
+    const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-      <div className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          {blog.image && (
+        <div className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+            {blog.image ? ( // Check if blog.image exists
                 <img
-                    src={`https://savefiles.org/${blogs.image}?shareable_link=522`}
+                src={blog.image ? `https://savefiles.org/${blog.image}?shareable_link=522` : 'default-image.jpg'}
                     alt={blog.title}
                     className="w-full h-48 object-cover mb-4 rounded-md"
                 />
+            ) : (
+                <div className="h-48 mb-4 rounded-md bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-500">No image available</span>
+                </div>
             )}
-        <h3 className="text-xl font-semibold text-gray-800">{blog.title}</h3>
-        <p className="text-gray-500">by {blog.therapistName} on {new Date(blog.createdAt).toLocaleDateString()}</p>
-        <p className="text-gray-700">
-          {isExpanded ? blog.article : `${blog.article.substring(0, 100)}... `}
-          <button 
-            onClick={() => setIsExpanded(!isExpanded)} 
-            className="text-blue-600 hover:text-blue-800 transition duration-150"
-          >
-            {isExpanded ? "Read Less" : "Read More"}
-          </button>
-        </p>
-        <div className="flex justify-end mt-4 space-x-2">
-          <button 
-            onClick={() => handleEdit(blog)} 
-            className="flex items-center text-blue-600 hover:text-blue-800 transition duration-150"
-          >
-            <AiOutlineEdit className="mr-1" />
-            Edit
-          </button>
-          <button 
-            onClick={() => handleDelete(blog.id)} 
-            className="flex items-center text-red-600 hover:text-red-800 transition duration-150"
-          >
-            <AiOutlineDelete className="mr-1" />
-            Delete
-          </button>
+            <h3 className="text-xl font-semibold text-gray-800">{blog.title}</h3>
+            <p className="text-gray-500">by {blog.author.name || "Unknown"} on {new Date(blog.createdAt).toLocaleDateString()}</p>
+            <p className="text-gray-700">
+                {isExpanded ? blog.article || "No content available." : (blog.article ? `${blog.article.substring(0, 100)}...` : "No content available.")}
+                <button 
+                    onClick={() => setIsExpanded(!isExpanded)} 
+                    className="text-blue-600 hover:text-blue-800 transition duration-150"
+                >
+                    {isExpanded ? "Read Less" : "Read More"}
+                </button>
+            </p>
+            <div className="flex justify-end mt-4 space-x-2">
+                <button 
+                    onClick={() => handleEdit(blog)} 
+                    className="flex items-center text-blue-600 hover:text-blue-800 transition duration-150"
+                >
+                    <AiOutlineEdit className="mr-1" />
+                    Edit
+                </button>
+                <button 
+                    onClick={() => handleDelete(blog.id)} 
+                    className="flex items-center text-red-600 hover:text-red-800 transition duration-150"
+                >
+                    <AiOutlineDelete className="mr-1" />
+                    Delete
+                </button>
+            </div>
         </div>
-      </div>
     );
-  };
+};
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
@@ -202,17 +200,6 @@ const Blog = () => {
               </button>
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Therapist Name</label>
-                <input
-                  type="text"
-                  name="therapistName"
-                  value={formData.therapistName}
-                  onChange={(e) => setFormData({ ...formData, therapistName: e.target.value })}
-                  className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                  required
-                />
-              </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Title</label>
                 <input

@@ -28,7 +28,7 @@ export const apiDeleteMood = async (id) => {
 export const apiCreateBlogPost = async (payload) => {
     try {
         console.log(payload); // Log the payload for debugging
-        const response = await apiClient.post("/therapist/blogs", payload); // Send POST request to the /therapists/blogs endpoint
+        const response = await apiClient.post("/blogs", payload); // Send POST request to the /therapists/blogs endpoint
         return response.data; // Return the response data
     } catch (error) {
         console.error("Error creating blog post:", error); // Log any error that occurs
@@ -37,9 +37,9 @@ export const apiCreateBlogPost = async (payload) => {
 };
 
 // Get all blogs for a specific therapist
-export const apiGetBlogsByTherapist = async (therapistId) => {
+export const apiGetBlogsByTherapist = async () => {
     try {
-        const response = await apiClient.get(`/therapist/blogs/${therapistId}`);
+        const response = await apiClient.get("/blogs/me");
         return response.data; // Return the list of blogs for the therapist
     } catch (error) {
         console.error("Error fetching blogs for therapist:", error);
@@ -51,7 +51,7 @@ export const apiGetBlogsByTherapist = async (therapistId) => {
 
 export const getAllBlogs = async () => {
     try {
-      const response = await api.get('/therapist/blogs'); // Assuming this endpoint returns an array
+      const response = await api.get('/blogs'); // Assuming this endpoint returns an array
       return response.data; // Assuming the data contains the blogs array directly
     } catch (error) {
       throw error;
@@ -61,7 +61,7 @@ export const getAllBlogs = async () => {
 // Edit a blog post
 export const apiEditBlogPost = async (id, payload) => {
     try {
-        const response = await apiClient.patch(`/therapist/blogs/${id}`, payload);
+        const response = await apiClient.patch(`blogs/${id}`, payload);
         return response.data; // Return updated blog post data
     } catch (error) {
         console.error("Error editing blog post:", error);
@@ -72,7 +72,7 @@ export const apiEditBlogPost = async (id, payload) => {
 // Delete a blog post
 export const apiDeleteBlogPost = async (id) => {
     try {
-        await apiClient.delete(`/therapist/blogs/${id}`);
+        await apiClient.delete(`/blogs/${id}`);
         return { message: "Blog deleted successfully" }; // Return a success message
     } catch (error) {
         console.error("Error deleting blog post:", error);

@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { ThumbsUp, MessageCircle, Calendar, Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ThumbsUp, MessageCircle, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 
 function App() {
-  const [blogs, setBlogs] = useState([]); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
-  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchDate, setSearchDate] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [likes, setLikes] = useState({});
   const [expandedBlogId, setExpandedBlogId] = useState(null);
+
   useEffect(() => {
-    
     const fetchBlogs = async () => {
       setLoading(true);
       try {
-        const response = await fetch('https://breeze-api-e791.onrender.com/therapist/blogs'); 
+        const response = await fetch('https://breeze-api-e791.onrender.com/blogs');
         if (!response.ok) throw new Error('Failed to fetch blogs');
         const data = await response.json();
         setBlogs(data);
@@ -36,17 +35,17 @@ function App() {
     }));
   };
 
-  const filteredBlogs = blogs.filter(
-    (blog) => !searchDate || blog.date === searchDate
-  );
+  const filteredBlogs = blogs.filter((blog) => {
+    if (!searchDate) return true;
+    const blogDate = new Date(blog.createdAt).toISOString().split('T')[0];
+    return blogDate === searchDate;
+  });
 
   const blogsPerPage = 4;
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
-
-  
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
@@ -79,55 +78,29 @@ function App() {
           <p className="text-center text-red-500">Error: {error}</p>
         ) : (
           <>
-          
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {currentBlogs.map((blog) => (
-                <div
-                  key={blog.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-[1.02]"
-                >
-                  <img
-                    src={`https://savefiles.org/${blog.image}?shareable_link=522`}
-                    alt={blog.title}
-                    className="w-full h-48 object-cover"
-                  />
+                <div key={blog.id} className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-[1.02]">
+                  <img src={`https://savefiles.org/${blog.image}?shareable_link=522`} alt={blog.title} className="w-full h-48 object-cover" />
                   <div className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                        {blog.title}
-                      </h2>
-                      {/* <span className="text-sm text-gray-500">{blog.date}</span> */}
-                    </div>
-                    <p className="text-gray-600 text-sm mb-2">
-                      By {blog.therapistName}
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">{blog.title}</h2>
+                    <p className="text-gray-600 text-sm mb-2">By {blog.author.name}</p>
+                    <p className="text-gray-500 text-xs mb-2">
+                      {new Date(blog.createdAt).toLocaleDateString()} {/* Displaying the date */}
                     </p>
-                    <p className={expandedBlogId === blog.id ? "mb-4" : "mb-4"}>
-                      {blog.article}
-                    </p>
-                    {/* <p className="text-gray-700 mb-4">{blog.preview}</p> */}
-
+                    <p className={expandedBlogId === blog.id ? "mb-4" : "mb-4"}>{blog.article}</p>
                     <div className="flex items-center justify-between">
                       <div className="flex space-x-4">
-                        <button
-                          onClick={() => handleLike(blog.id)}
-                          className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition"
-                        >
+                        <button onClick={() => handleLike(blog.id)} className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition">
                           <ThumbsUp className="w-5 h-5" />
-                          {/* <span>{(likes[blog.id] || 0) + blog.likes}</span> */}
                         </button>
                         <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition">
                           <MessageCircle className="w-5 h-5" />
-                          {/* <span>{blog.comments.length}</span> */}
                         </button>
                       </div>
-                      <div className="flex items-center justify-between">
-                      <button
-                        onClick={() => setExpandedBlogId(expandedBlogId === blog.id ? null : blog.id)}
-                        className="text-blue-600 hover:text-blue-800 transition duration-150"
-                      >
+                      <button onClick={() => setExpandedBlogId(expandedBlogId === blog.id ? null : blog.id)} className="text-blue-600 hover:text-blue-800 transition duration-150">
                         {expandedBlogId === blog.id ? "Read Less" : "Read More"}
                       </button>
-                    </div>
                     </div>
                   </div>
                 </div>
@@ -137,26 +110,11 @@ function App() {
             {/* Pagination */}
             {filteredBlogs.length > blogsPerPage && (
               <div className="flex justify-center items-center space-x-4 mt-8">
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="p-2 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">
                   <ChevronLeft className="w-6 h-6" />
                 </button>
-                <span className="text-gray-600">
-                  Page {currentPage} of{' '}
-                  {Math.ceil(filteredBlogs.length / blogsPerPage)}
-                </span>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) =>
-                      Math.min(prev + 1, Math.ceil(filteredBlogs.length / blogsPerPage))
-                    )
-                  }
-                  disabled={currentPage === Math.ceil(filteredBlogs.length / blogsPerPage)}
-                  className="p-2 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <span className="text-gray-600">Page {currentPage} of {Math.ceil(filteredBlogs.length / blogsPerPage)}</span>
+                <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(filteredBlogs.length / blogsPerPage)))} disabled={currentPage === Math.ceil(filteredBlogs.length / blogsPerPage)} className="p-2 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">
                   <ChevronRight className="w-6 h-6" />
                 </button>
               </div>
