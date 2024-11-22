@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { apiTherapistLogin } from "../../services/auth";
 import { Lock, Mail, Heart, Sparkles,  } from 'lucide-react';
+import { FaArrowLeft } from "react-icons/fa";
+import { Link } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false)
@@ -48,8 +50,9 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 md:p-6">
+       <Link to="/"><FaArrowLeft className="font-bold text-4xl text-blue-600"/></Link> 
     <div className="max-w-md mx-auto">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden mt-28">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-center">
           <div className="flex justify-center items-center space-x-2 mb-2">

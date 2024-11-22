@@ -3,6 +3,8 @@ import { Heart, Stethoscope, Mail, Phone, Award, BookOpen, Clock, User, Sparkles
 import { apiTherapistSignup } from '../../services/auth';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa';
 function App() {
   const [loading, setLoading] = useState(false);
   const currentYear = new Date().getFullYear();
@@ -50,6 +52,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6 md:p-8">
+       <Link to="/"><FaArrowLeft className="font-bold text-4xl text-blue-600"/></Link> 
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header Section */}

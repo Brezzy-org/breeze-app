@@ -5,6 +5,7 @@ import { apiSignup } from "../../services/auth";
 ;
 import { Link } from "react-router-dom";
 import { Heart, Lock, Mail, Sparkles, User } from "lucide-react";
+import { FaArrowLeft } from "react-icons/fa";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -46,6 +47,7 @@ const Register = () => {
   return (
    
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6 md:p-8">
+       <Link to="/"><FaArrowLeft className="font-bold text-4xl text-blue-600"/></Link> 
       <div className="max-w-md mx-auto">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header Section */}

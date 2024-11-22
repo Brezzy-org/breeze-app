@@ -33,8 +33,9 @@ function App() {
       path: "/",
       element: <Home />,
     },
+
     {
-      path: "/about",
+      path: "",
       element: <About />,
     },
    {
